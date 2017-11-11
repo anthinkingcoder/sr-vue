@@ -5,17 +5,17 @@
 </template>
 
 <script>
-  export default {
-    name: 'app'
-  }
+export default {
+  name: 'app'
+}
 </script>
 
 <style lang="stylus">
   html, body, #app, input, textarea
-  font-family "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Segoe UI", "Microsoft YaHei", "微软雅黑", sans-serif
-                                                                                                          -webkit-font-smoothing antialiased
-                                                                                                          -moz-osx-font-smoothing grayscale
-                                                                                                          height 100%
+    font-family "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Segoe UI", "Microsoft YaHei", "微软雅黑", sans-serif
+    -webkit-font-smoothing antialiased
+    -moz-osx-font-smoothing grayscale
+    height 100%
 
   h2 {
     display: block;

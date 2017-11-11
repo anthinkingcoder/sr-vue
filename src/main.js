@@ -9,7 +9,6 @@ import iView from 'iview'
 import moment from 'moment'
 import vueMoment from 'vue-moment'
 import 'iview/dist/styles/iview.css'
-import '../theme/index.less'
 
 window.moment = moment
 Vue.config.productionTip = false
@@ -21,7 +20,7 @@ axios.interceptors.response.use(
   response => {
     if (response.data.code === 601) {
       router.replace({
-        path: '/admin/login'
+        path: '/login'
       })
     }
     return response
