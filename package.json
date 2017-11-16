@@ -15,10 +15,13 @@
   },
   "dependencies": {
     "axios": "^0.17.0",
+    "count-down": "0.0.2",
+    "crypto": "^1.0.1",
     "iview": "^2.6.0",
     "moment": "^2.19.1",
     "vue": "^2.5.3",
     "vue-axios": "^2.0.2",
+    "vue-count-down": "^0.2.2",
     "vue-moment": "^2.1.0",
     "vue-router": "^3.0.1"
   },

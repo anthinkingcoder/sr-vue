@@ -15,7 +15,6 @@ Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
 Vue.use(iView)
 Vue.use(vueMoment)
-
 axios.interceptors.response.use(
   response => {
     if (response.data.code === 601) {

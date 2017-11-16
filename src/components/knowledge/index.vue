@@ -12,19 +12,28 @@
         </Menu>
         </Col>
         <Col span="19">
-        <h1  v-show="visible">
-          资源内容
-        </h1>
-        <div class="layout-content-main" v-html="resource.content">
-        </div>
-        <div class="layout-content-at">
-          <h1 v-show="visible">
-            附件下载
-          </h1>
-          <a :key="item.id" v-for="item in attachments" :href="item.url">
-            {{item.name}}
-          </a>
-        </div>
+          <div style="padding-top: 10px">
+            <Tabs type="card" :animated="false" @on-click="tabClick" :value="tabName">
+              <TabPane label="资源文档" name="0">
+                <h1  v-show="visible">
+                  资源内容
+                </h1>
+                <div class="layout-content-main" v-html="resource.content">
+                </div>
+                <div class="layout-content-at">
+                  <h1 v-show="visible">
+                    附件下载
+                  </h1>
+                  <a :key="item.id" v-for="item in attachments" :href="item.url">
+                    {{item.name}}
+                  </a>
+                </div>
+              </TabPane>
+              <TabPane label="实例教程" name="1">
+                <Example ref="example"></Example>
+              </TabPane>
+            </Tabs>
+          </div>
         </Col>
       </Row>
     </div>
@@ -32,9 +41,13 @@
 </template>
 
 <script>
+  import Example from '../example/index.vue'
   export default {
     created () {
       this.listKnowledges()
+    },
+    components: {
+      Example
     },
     data () {
       return {
@@ -43,8 +56,9 @@
         attachments: [],
         currentKnowledgeId: 0,
         visible: false,
-        title: '',
-        topicId: 0
+        title: 'Basic',
+        topicId: 0,
+        tabName: '0'
       }
     },
     watch: {
@@ -53,19 +67,31 @@
     },
     methods: {
       menuSelect (id) {
+        this.currentKnowledgeId = id
         this.getResourceDocument(id)
         this.listAttachment(id)
         this.visible = true
+        this.tabClick(1, true)
+      },
+      findTopic (topicId) {
+        this.$http.get('/api/topic/findOne', {
+          params: {
+            topicId: topicId
+          }
+        }).then((response) => {
+          let res = response.data
+          if (res.code === 666) {
+            this.title = res.data.name
+          }
+        }).catch(() => {
+        })
       },
       listKnowledges () {
-        this.title = this.$route.query.title
-        if (this.title === '基础知识') {
-          this.topicId = 0
-        }
         this.topicId = this.$route.query.topicId
         let url = '/api/knowledge/base/all'
         if (this.topicId && this.topicId !== 0) {
           url = 'api/knowledge/topic/all'
+          this.findTopic(this.topicId)
         }
         this.$http.get(url, {
           params: {
@@ -110,6 +136,11 @@
           }
         }).catch(() => {
         })
+      },
+      tabClick (name, isLoad) {
+        if (name === 1) {
+          this.$refs.example.loadData(this.currentKnowledgeId, isLoad)
+        }
       }
     }
   }

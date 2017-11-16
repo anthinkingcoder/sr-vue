@@ -1,11 +1,12 @@
 <style>
   .layout {
-    background: #f5f7f9;
+    /*background: #f5f7f9;*/
+    background: #f3f5f7;
   }
 
   .layout-logo {
-    height: 50px;
-    margin-top: 15px;
+    height: 40px;
+    margin-top: 5px;
     margin-left: 15px;
     float: left;
   }
@@ -33,13 +34,10 @@
     height: 80px;
     margin: 0 auto;
   }
-
-
-
   .layout-content {
     min-height: 640px;
     overflow: hidden;
-    background: #fff;
+    background: #f3f5f7 ;
     border-radius: 4px;
     width: 100%;
   }
@@ -60,70 +58,68 @@
   <div class="layout">
     <BackTop></BackTop>
     <div class="layout-nav">
-      <Menu mode="horizontal" active-name="1" style="height: 80px;
-    line-height: 80px;" @on-select="menuSelect">
-        <div class="layout-logo">
-          <img src="/static/img/java.jpg" height="50px"></Col>
-        </div>
-        <div class="layout-search">
-          <Input v-model="search" placeholder="搜索你感兴趣的内容">
-          </Input>
-        </div>
-        <div class="layout-avatar" v-show="isLogin">
-          <Dropdown @on-click="logout">
-            <a>
-              <Avatar src="/static/img/avatar1.JPG"></Avatar>
-              <Icon type="arrow-down-b" size="small"></Icon>
-            </a>
-            <Dropdown-menu slot="list">
-              <Dropdown-item>Signed in as
-                <span>{{username}}</span></Dropdown-item>
-              <Dropdown-item>注销</Dropdown-item>
-            </Dropdown-menu>
-          </Dropdown>
-        </div>
 
-        <!--<div class="layout-sign" v-show="!isLogin">-->
-        <!--<a>Sign up</a>-->
-        <!--<span class="sign-span">Or</span>-->
-        <!--<a>Sign in</a>-->
-        <!--</div>-->
-        <div class="layout-assistant">
-          <MenuItem name="1">
-            <Icon type="ionic"></Icon>
-            <span class="layout-text">基础知识</span>
-          </MenuItem>
-          <MenuItem name="2">
-            <Icon type="happy"></Icon>
-            <span class="layout-text">进阶专题</span>
-          </MenuItem>
-          <MenuItem name="3">
-            <Icon type="bowtie"></Icon>
+      <Affix>
+        <Menu mode="horizontal" :active-name="activeNav" style="height: 60px;
+    line-height: 60px;" @on-select="menuSelect">
+          <div class="layout-logo">
+            <img src="/static/img/java.jpg" height="50px"></Col>
+          </div>
+          <!--<div class="layout-search">-->
+            <!--<Input v-model="search" placeholder="搜索你感兴趣的内容">-->
+            <!--</Input>-->
+          <!--</div>-->
+          <div class="layout-avatar" v-show="isLogin">
+            <Dropdown >
+              <a>
+                <Avatar src="/static/img/avatar1.JPG"></Avatar>
+                <Icon type="arrow-down-b" size="small"></Icon>
+              </a>
+              <Dropdown-menu slot="list" >
+                <Dropdown-item>Signed in as
+                  <span>{{username}}</span></Dropdown-item>
+                <Dropdown-item><Button @click="goToTestHistory" type="text">历史测试</Button></Dropdown-item>
+                <Dropdown-item ><Button @click="logout" type="text">注销</Button></Dropdown-item>
+              </Dropdown-menu>
+            </Dropdown>
+          </div>
 
+          <!--<div class="layout-sign" v-show="!isLogin">-->
+          <!--<a>Sign up</a>-->
+          <!--<span class="sign-span">Or</span>-->
+          <!--<a>Sign in</a>-->
+          <!--</div>-->
+          <div class="layout-assistant">
+            <MenuItem name="1">
+              <Icon type="ionic"></Icon>
+              <span class="layout-text">基础知识</span>
+            </MenuItem>
+            <MenuItem name="2">
+              <Icon type="happy"></Icon>
+              <span class="layout-text">进阶专题</span>
+            </MenuItem>
+            <MenuItem name="3">
+              <Icon type="bowtie"></Icon>
+              <span class="layout-text">拓展知识</span>
+            </MenuItem>
+            <MenuItem name="5">
+              <Icon type="grid"></Icon>
+              <span class="layout-text">学生作品</span>
+            </MenuItem>
 
+            <MenuItem name="7">
+              <Icon type="ios-cloud-download"></Icon>
+              <span class="layout-text">相关资源</span>
+            </MenuItem>
 
-            <span class="layout-text">拓展知识</span>
-          </MenuItem>
-          <MenuItem name="4">
-            <Icon type="ios-videocam"></Icon>
-            <span class="layout-text">实例教程</span>
-          </MenuItem>
-          <MenuItem name="5">
-            <Icon type="grid"></Icon>
-            <span class="layout-text">学生作品</span>
-          </MenuItem>
+            <MenuItem name="6">
+              <Icon type="battery-full"></Icon>
+              <span class="layout-text">在线测试</span>
+            </MenuItem>
+          </div>
 
-          <MenuItem name="6">
-            <Icon type="battery-full"></Icon>
-            <span class="layout-text">在线测试</span>
-          </MenuItem>
-          <MenuItem name="7">
-            <Icon type="ios-cloud-download"></Icon>
-            <span class="layout-text">相关资源</span>
-          </MenuItem>
-        </div>
-
-      </Menu>
+        </Menu>
+      </Affix>
     </div>
 
     <div class="layout-content">
@@ -144,33 +140,50 @@
   export default {
     created () {
       this.getUser()
-      this.menuSelect(1)
+      this.menuSelect(this.$route.query.mId)
     },
     data () {
       return {
         isLogin: true,
         username: '',
         name: '',
+        activeNav: 1,
         nav: {
           '1': {
+            mId: '1',
             path: '/knowledge',
-            title: '基础知识'
+            title: '基础知识',
+            menuId: this.cryptoMenuId('基础知识' + '1')
           },
           '2': {
+            mId: '2',
             path: '/topic',
-            title: '进阶专题'
+            title: '进阶专题',
+            menuId: this.cryptoMenuId('进阶专题' + '2')
           },
-          '4': {
-            path: '/example',
-            title: '实例教程'
+          '3': {
+            mId: '3',
+            path: '/expand_knowledge',
+            title: '拓展知识',
+            menuId: this.cryptoMenuId('进阶专题' + '3')
           },
           '5': {
+            mId: '5',
             path: '/student_work',
-            title: '学生作品'
+            title: '学生作品',
+            menuId: this.cryptoMenuId('学生作品' + '5')
+          },
+          '6': {
+            mId: '6',
+            path: '/question/test_select',
+            title: '在线测试',
+            menuId: this.cryptoMenuId('在线测试' + '6')
           },
           '7': {
+            mId: '7',
             path: '/resource',
-            title: '相关资源'
+            title: '相关资源',
+            menuId: this.cryptoMenuId('相关资源' + '7')
           }
         },
         search: ''
@@ -182,16 +195,37 @@
     },
     methods: {
       onMenuTitle () {
-        console.info(this.$route.query.title)
+//        var title = this.$route.query.title
+//        if (this.cryptoMenuId(title) !== this.$route.query.menuId) {
+//          console.info('error')
+//        }
+      },
+      cryptoMenuId (name) {
+        const crypto = require('crypto')
+        const secret = '837769723'
+        const hash = crypto.createHmac('sha256', secret)
+          .update(name)
+          .digest('hex')
+        return hash
       },
       menuSelect (name) {
+        if (!name) {
+          return
+        }
+        this.activeNav = name
         this.$router.push({
           path: this.nav['' + name + ''].path,
           query: {
-            title: this.nav['' + name + ''].title
+            menuId: this.nav['' + name + ''].menuId,
+            mId: this.nav['' + name + ''].mId
           }
         })
         document.title = this.nav['' + name + ''].title
+      },
+      goToTestHistory () {
+        this.$router.push({
+          path: '/user/test_history'
+        })
       },
       logout () {
         this.$Modal.confirm({

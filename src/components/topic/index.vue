@@ -1,7 +1,7 @@
 <template>
   <div style="padding: 20px;">
-    <Row type="flex">
-      <Col span="5">
+    <Row type="flex" justify="center">
+      <Col span="4">
       <Row  type="flex" justify="center" >
           <Col span="24">
           <Card>
@@ -17,7 +17,7 @@
           </Col>
       </Row>
       </Col>
-      <Col span="18"  offset="1">
+      <Col span="16"  offset="1">
       <Row  type="flex" justify="center" >
           <Col span="24">
           <Card>
