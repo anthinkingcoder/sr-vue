@@ -10,28 +10,25 @@
     margin-left: 15px;
     float: left;
   }
-  .layout-search {
-    float: left;
-    width: 300px;
-    margin-left: 40px;
-  }
+
 
   .layout-assistant {
     margin: 0px auto;
     height: inherit;
     float: right;
-
   }
   .layout-avatar {
     float: right;
     margin-right: 60px;
     margin-left: 30px;
-    margin-top: 15px;
+    padding-top: 10px;
+    vertical-align: middle;
+    height: 100%;
   }
 
 
   .layout-nav {
-    height: 80px;
+    height: 64px;
     margin: 0 auto;
   }
   .layout-content {
@@ -41,8 +38,9 @@
     border-radius: 4px;
     width: 100%;
   }
-  .ivu-input {
-    border: none
+
+  input {
+    outline:none;
   }
 
   .layout-content-main {
@@ -53,6 +51,33 @@
     padding: 10px 0 20px;
     color: #9ea7b4;
   }
+
+  .layout-search {
+    float: left;
+    width: 300px;
+    margin-left: 40px;
+    border-bottom: 1px solid #dddee1;
+    vertical-align: middle;
+    height: 48px;
+
+  }
+  .search-input {
+    width: 100%;
+    height: 32px;
+    line-height: 1.5;
+    padding: 4px 7px;
+    font-size: 12px;
+    color: #495060;
+    border-radius: 4px;
+    border: none;
+    transition: border .2s ease-in-out,background .2s ease-in-out,box-shadow .2s ease-in-out;
+    display: inline-block;
+    outline:none;
+    position: relative;
+    cursor: text;
+  }
+  .ivu-input {
+  }
 </style>
 <template>
   <div class="layout">
@@ -60,19 +85,25 @@
     <div class="layout-nav">
 
       <Affix>
-        <Menu mode="horizontal" :active-name="activeNav" style="height: 60px;
+        <Menu mode="horizontal" :active-name="activeNav" style="height: 64px;
     line-height: 60px;" @on-select="menuSelect">
           <div class="layout-logo">
             <img src="/static/img/java.jpg" height="50px"></Col>
           </div>
-          <!--<div class="layout-search">-->
-            <!--<Input v-model="search" placeholder="搜索你感兴趣的内容">-->
-            <!--</Input>-->
-          <!--</div>-->
+          <div class="layout-search">
+              <Row>
+                <Col span="21">
+                 <input v-model="search" placeholder="搜索你感兴趣的内容"  v-on:keyup.enter="goToSearch" class="search-input" />
+                </Col>
+                <Col span="2">
+                  <Button @click="goToSearch" type="text"><Icon type="ios-search"></Icon></Button>
+                </Col>
+              </Row>
+          </div>
           <div class="layout-avatar" v-show="isLogin">
             <Dropdown >
               <a>
-                <Avatar src="/static/img/avatar1.JPG"></Avatar>
+                <Avatar :src="headImg ? headImg : '/static/img/avatar1.JPG'"></Avatar>
                 <Icon type="arrow-down-b" size="small"></Icon>
               </a>
               <Dropdown-menu slot="list" >
@@ -90,34 +121,11 @@
           <!--<a>Sign in</a>-->
           <!--</div>-->
           <div class="layout-assistant">
-            <MenuItem name="1">
-              <Icon type="ionic"></Icon>
-              <span class="layout-text">基础知识</span>
-            </MenuItem>
-            <MenuItem name="2">
-              <Icon type="happy"></Icon>
-              <span class="layout-text">进阶专题</span>
-            </MenuItem>
-            <MenuItem name="3">
-              <Icon type="bowtie"></Icon>
-              <span class="layout-text">拓展知识</span>
-            </MenuItem>
-            <MenuItem name="5">
-              <Icon type="grid"></Icon>
-              <span class="layout-text">学生作品</span>
-            </MenuItem>
-
-            <MenuItem name="7">
-              <Icon type="ios-cloud-download"></Icon>
-              <span class="layout-text">相关资源</span>
-            </MenuItem>
-
-            <MenuItem name="6">
-              <Icon type="battery-full"></Icon>
-              <span class="layout-text">在线测试</span>
+            <MenuItem :name="index" v-for="(item,index) in navs" :key="item.title" v-if="item.menu">
+              <Icon :type="item.type"></Icon>
+              <span class="layout-text">{{item.title}}</span>
             </MenuItem>
           </div>
-
         </Menu>
       </Affix>
     </div>
@@ -126,7 +134,7 @@
       <Row>
         <Col span="24">
         <div class="layout-content-main">
-          <router-view></router-view>
+          <router-view @words="onWordsChange"></router-view>
         </div>
         </Col>
       </Row>
@@ -140,65 +148,83 @@
   export default {
     created () {
       this.getUser()
-      this.menuSelect(this.$route.query.mId)
+      this.search = this.$route.query.words
+      if (this.$route.path === '/') {
+        this.menuSelect(0)
+      } else {
+        this.navs.forEach((item, index) => {
+          if (this.$route.path === item.path) {
+            this.menuSelect(index)
+          }
+        })
+      }
     },
     data () {
       return {
         isLogin: true,
         username: '',
+        headImg: '',
         name: '',
-        activeNav: 1,
-        nav: {
-          '1': {
-            mId: '1',
+        activeNav: 0,
+        navs: [
+          {
             path: '/knowledge',
             title: '基础知识',
-            menuId: this.cryptoMenuId('基础知识' + '1')
+            type: 'ionic',
+            menu: true
           },
-          '2': {
-            mId: '2',
+          {
             path: '/topic',
             title: '进阶专题',
-            menuId: this.cryptoMenuId('进阶专题' + '2')
+            type: 'happy',
+            menu: true
           },
-          '3': {
-            mId: '3',
+          {
             path: '/expand_knowledge',
             title: '拓展知识',
-            menuId: this.cryptoMenuId('进阶专题' + '3')
+            type: 'bowtie',
+            menu: true
           },
-          '5': {
-            mId: '5',
+          {
             path: '/student_work',
             title: '学生作品',
-            menuId: this.cryptoMenuId('学生作品' + '5')
+            type: 'grid',
+            menu: true
           },
-          '6': {
-            mId: '6',
+          {
             path: '/question/test_select',
             title: '在线测试',
-            menuId: this.cryptoMenuId('在线测试' + '6')
+            type: 'battery-full',
+            menu: true
           },
-          '7': {
-            mId: '7',
+          {
             path: '/resource',
             title: '相关资源',
-            menuId: this.cryptoMenuId('相关资源' + '7')
+            type: 'ios-cloud-download',
+            menu: true
+          },
+          {
+            path: '/user/test_history',
+            title: '历史测试',
+            menu: false
+          },
+          {
+            path: '/question/test',
+            title: '在线测试',
+            menu: false
+          },
+          {
+            path: '/question/evaluate_result',
+            title: '在线测试',
+            menu: false
           }
-        },
+        ],
         search: ''
       }
     },
-    watch: {
-      // 如果路由有变化，会再次执行该方法
-      '$route': 'onMenuTitle'
-    },
     methods: {
-      onMenuTitle () {
-//        var title = this.$route.query.title
-//        if (this.cryptoMenuId(title) !== this.$route.query.menuId) {
-//          console.info('error')
-//        }
+      onWordsChange (words) {
+        this.search = words
       },
       cryptoMenuId (name) {
         const crypto = require('crypto')
@@ -208,23 +234,31 @@
           .digest('hex')
         return hash
       },
-      menuSelect (name) {
-        if (!name) {
-          return
-        }
-        this.activeNav = name
+      menuSelect (index) {
+        this.activeNav = parseInt(index)
+        this.search = ''
         this.$router.push({
-          path: this.nav['' + name + ''].path,
-          query: {
-            menuId: this.nav['' + name + ''].menuId,
-            mId: this.nav['' + name + ''].mId
-          }
+          path: this.navs[this.activeNav].path,
+          query: this.$route.query
         })
-        document.title = this.nav['' + name + ''].title
+        document.title = this.navs[this.activeNav].title
       },
       goToTestHistory () {
         this.$router.push({
-          path: '/user/test_history'
+          path: '/user/test_history',
+          query: {
+          }
+        })
+      },
+      goToSearch () {
+        console.info('goToSearch')
+        this.activeNav = -1
+        this.$router.push({
+          path: '/search',
+          query: {
+            words: this.search
+          },
+          replace: true
         })
       },
       logout () {
@@ -250,12 +284,9 @@
         this.$http.get('/api/user/info').then((response) => {
           let res = response.data
           if (res.code === 666) {
-            console.info(res.data)
             this.username = res.data.username
             this.name = res.data.name
-            if (res.data.level === 1) {
-              this.systemVisible = true
-            }
+            this.headImg = res.data.headImg
           }
         }).catch(() => {
         })

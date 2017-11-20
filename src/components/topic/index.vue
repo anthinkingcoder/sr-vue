@@ -4,13 +4,22 @@
       <Col span="4">
       <Row  type="flex" justify="center" >
           <Col span="24">
-          <Card>
+          <Card style="min-height: 200px">
             <p slot="title">
               全部专题
             </p>
-            <ul>
-              <li v-for="item in topicCategories" style="padding: 10px;">
-                <a @click="showTopic(item.id, item.name)">{{ item.name }}</a>
+            <ul class="topic-category-ul">
+              <li v-for="item in topicCategories">
+                <div class="border">
+                      <Row>
+                        <Col span="22">
+                        <a @click="showTopic(item.id, item.name)">{{ item.name }}</a>
+                        </Col>
+                        <Col span="2">
+                        <Icon type="chevron-right" color="#333"></Icon>
+                        </Col>
+                      </Row>
+                </div>
               </li>
             </ul>
           </Card>
@@ -19,19 +28,19 @@
       </Col>
       <Col span="16"  offset="1">
       <Row  type="flex" justify="center" >
-          <Col span="24">
-          <Card>
+          <Col span="24" >
+          <Card style="min-height: 500px">
             <p slot="title">
               {{currentTopicCateogry}}
             </p>
             <Row  type="flex" justify="start">
-              <Col span="6"  v-for="item in topics" :key="item.id"   style="margin: 5px"  width="100%">
+              <Col span="7"  v-for="item in topics" :key="item.id"   style="margin: 5px" >
               <Card>
                 <div style="text-align:center" class="topic">
                   <a @click="show(item.id,item.name)">
                     <Row :gutter="16">
                       <Col span="6">
-                      <Avatar :src="item.coverUrl ? item.coverUrl: '/static/img/java.jpg'" size="large"/>
+                      <Avatar :src="item.coverUrl ? item.coverUrl: '/static/img/java.jpg'" size="default"/>
                       </Col>
                       <Col span="12">
                       <div >
@@ -128,6 +137,17 @@
 
   .topic a {
     color: #666;
+  }
+  .topic-category-ul a {
+    color: #333;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .border {
+    border-bottom: 1px solid #EDEDED;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 
 

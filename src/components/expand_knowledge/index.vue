@@ -17,6 +17,10 @@
               <p class="ek-summary">
                 {{item.summary}}
               </p>
+              <br>
+              <p class="ek-summary">
+                {{item.createAt |moment("YYYY-MM-DD HH:mm")}}
+              </p>
             </Card>
           </a>
           </Col>
@@ -25,7 +29,7 @@
       </Row>
     </div>
 
-    <div style="text-align: center;margin-top: 30px">
+    <div style="text-align: center;margin-top: 30px" v-show="total > per">
       <Page :total="total" :current="page" :page-size="per" @on-change="listExpandKnowledge"></Page>
     </div>
 

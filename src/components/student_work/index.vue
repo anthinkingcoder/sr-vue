@@ -6,12 +6,17 @@
         <h3 style="margin-top: 17px">类型:</h3>
         </Col>
         <Col span="20">
-        <Menu  active-name="0" mode="horizontal" @on-select="menuSelect">
-          <MenuItem name="0">全部</MenuItem>
-          <MenuItem name="1">课程设计</MenuItem>
-          <MenuItem name="2">项目实训</MenuItem>
-          <MenuItem name="3">大赛作品</MenuItem>
-        </Menu>
+        <ul class="answer-sheet-num">
+          <li v-for="(category,index) in categories" :key="category.name">
+            <Button :type="category.active ? 'primary' : 'text'" @click="menuSelect(index)">{{category.name}}</Button>
+          </li>
+        </ul>
+        <!--<Menu  active-name="0" mode="horizontal" @on-select="menuSelect">-->
+          <!--<MenuItem name="0">全部</MenuItem>-->
+          <!--<MenuItem name="1">课程设计</MenuItem>-->
+          <!--<MenuItem name="2">项目实训</MenuItem>-->
+          <!--<MenuItem name="3">大赛作品</MenuItem>-->
+        <!--</Menu>-->
         </Col>
       </Row>
     </div>
@@ -59,6 +64,28 @@
     },
     data () {
       return {
+        categories: [
+          {
+            id: 0,
+            name: '全部',
+            active: true
+          },
+          {
+            id: 1,
+            name: '课程设计',
+            active: false
+          },
+          {
+            id: 2,
+            name: '项目实训',
+            active: false
+          },
+          {
+            id: 3,
+            name: '大赛作品',
+            active: false
+          }
+        ],
         category: 0,
         studentWorks: [],
         loading: true,
@@ -68,8 +95,12 @@
       }
     },
     methods: {
-      menuSelect (category) {
-        this.category = category
+      menuSelect (index) {
+        this.category = this.categories[index].id
+        this.categories.forEach((item) => {
+          item.active = false
+        })
+        this.categories[index].active = true
         this.listStudentWork(1)
       },
       show (id) {
@@ -159,5 +190,25 @@
     max-height: 200px;
     width: 200px
   }
+
+  .answer-sheet-num {
+    display: block;
+    margin-top: 15px;
+  }
+
+  .answer-sheet-num li {
+    float: left;
+    margin-right: 10px;
+  }
+  .answer-sheet-num a {
+    display: block;
+    color: #dce4ec;
+    font-size: 16px;
+    width: 40px;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+  }
+
 
 </style>

@@ -6,12 +6,17 @@
         <h3 style="margin-top: 17px">类型:</h3>
         </Col>
         <Col span="20">
-        <Menu  active-name="0" mode="horizontal" @on-select="menuSelect">
-          <MenuItem name="0">全部</MenuItem>
-          <MenuItem name="1">电子书</MenuItem>
-          <MenuItem name="3">优秀网站</MenuItem>
-          <MenuItem name="2">软件资源</MenuItem>
-        </Menu>
+        <ul class="answer-sheet-num">
+          <li v-for="(category,index) in categories" :key="category.name">
+            <Button :type="category.active ? 'primary' : 'text'" @click="menuSelect(index)">{{category.name}}</Button>
+          </li>
+        </ul>
+        <!--<Menu  active-name="0" mode="horizontal" @on-select="menuSelect">-->
+          <!--<MenuItem name="0">全部</MenuItem>-->
+          <!--<MenuItem name="1">电子书</MenuItem>-->
+          <!--<MenuItem name="3">优秀网站</MenuItem>-->
+          <!--<MenuItem name="2">软件资源</MenuItem>-->
+        <!--</Menu>-->
         </Col>
       </Row>
     </div>
@@ -22,18 +27,22 @@
           <Col span="4" v-for="item in resources" :key="item.id"  style="margin: 10px">
           <a>
             <Card>
-              <div  style="width:200px;height: 300px">
-                <div class="work-cover">
-                  <img :src="item.coverUrl ? item.coverUrl: '/static/img/avatar2.jpg'" style="max-width: 200px;max-height: 180px">
-                </div>
+              <Row type="flex" justify="end">
+                <Col span="24">
+                <img :src="item.coverUrl ? item.coverUrl: '/static/img/avatar2.jpg'" style="max-width: 100%;max-height: 100px">
+                </Col>
+                <Col span="24" style="margin-top: 5px">
                 <p class="work-title">{{item.name}}</p>
+                </Col>
+                <Col span="24" style="margin-top: 5px">
                 <p class="work-summary">{{item.summary}}</p>
-                <div style="float:right;margin-top: 5px">
-                  <Button :href="item.url" type="success" icon="ios-cloud-download" @click="go(item.url)">
-                    {{item.category === 3 ? '立即前往':'立即下载'}}
-                  </Button>
-                </div>
-              </div>
+                </Col>
+                <Col span="12" style="margin-top: 5px">
+                <Button type="success" icon="ios-cloud-download" @click="go(item.url)">
+                  {{item.category === 3 ? '立即前往':'立即下载'}}
+                </Button>
+                </Col>
+              </Row>
             </Card>
           </a>
           </Col>
@@ -61,6 +70,28 @@
     data () {
       return {
         category: 0,
+        categories: [
+          {
+            id: 0,
+            name: '全部',
+            active: true
+          },
+          {
+            id: 1,
+            name: '电子书',
+            active: false
+          },
+          {
+            id: 3,
+            name: '优秀网站',
+            active: false
+          },
+          {
+            id: 2,
+            name: '软件资源',
+            active: false
+          }
+        ],
         resources: [],
         loading: true,
         page: 0,
@@ -69,8 +100,12 @@
       }
     },
     methods: {
-      menuSelect (category) {
-        this.category = category
+      menuSelect (index) {
+        this.category = this.categories[index].id
+        this.categories.forEach((item) => {
+          item.active = false
+        })
+        this.categories[index].active = true
         this.listResource(1)
       },
       show (id) {
@@ -112,8 +147,8 @@
 <style>
   .resource-layout-category {
     background: #fff;
-    padding-left: 50px;
     padding-top: 50px;
+    padding-left: 100px;
   }
   .resource-layout-content {
     margin-top: 10px;
@@ -122,7 +157,7 @@
   }
   .resource-layout-content-main {
     min-height: 600px;
-    padding-left: 50px;
+    padding-left: 100px;
     padding-top: 50px;
   }
 
@@ -166,6 +201,25 @@
   .work-cover {
     max-height: 200px;
     width: 200px
+  }
+
+  .answer-sheet-num {
+    display: block;
+    margin-top: 15px;
+  }
+
+  .answer-sheet-num li {
+    float: left;
+    margin-right: 10px;
+  }
+  .answer-sheet-num a {
+    display: block;
+    color: #dce4ec;
+    font-size: 16px;
+    width: 40px;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
   }
 
 </style>

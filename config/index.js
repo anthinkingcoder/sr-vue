@@ -41,6 +41,16 @@ module.exports = {
         cookieDomainRewrite: {
           '*': ''
         }
+      },
+      '/ueditor': {
+        target: 'http://127.0.0.1:8088/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/ueditor': '/ueditor'
+        },
+        cookieDomainRewrite: {
+          '*': ''
+        }
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"

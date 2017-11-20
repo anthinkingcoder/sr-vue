@@ -3,9 +3,9 @@
     <div class="layout-content">
       <Row type="flex" justify="center">
         <Col span="5">
-        <Menu ref="baseMenu" :active-name="currentKnowledgeId"  @on-select="menuSelect">
+        <Menu :active-name="currentKnowledgeIndex"  @on-select="menuSelect" ref="knowledgeMenu">
           <MenuGroup :title="title">
-            <MenuItem v-if="item.resourceDocumentId" :name="item.resourceDocumentId" :key="item.resourceDocumentId" v-for="(item,index) in knowledges">
+            <MenuItem  v-for="(item,index) in knowledges" :name="index" :key="item.name" >
               {{item.name}}
             </MenuItem>
           </MenuGroup>
@@ -24,9 +24,11 @@
                   <h1 v-show="visible">
                     附件下载
                   </h1>
-                  <a :key="item.id" v-for="item in attachments" :href="item.url">
-                    {{item.name}}
-                  </a>
+                  <div style="margin: 35px;">
+                    <a :key="item.id" v-for="item in attachments" :href="item.url">
+                      {{item.name}}
+                    </a>
+                  </div>
                 </div>
               </TabPane>
               <TabPane label="实例教程" name="1">
@@ -51,10 +53,10 @@
     },
     data () {
       return {
+        currentKnowledgeIndex: 0,
         knowledges: [],
         resource: '',
         attachments: [],
-        currentKnowledgeId: 0,
         visible: false,
         title: 'Basic',
         topicId: 0,
@@ -66,10 +68,11 @@
       '$route': 'listKnowledges'
     },
     methods: {
-      menuSelect (id) {
-        this.currentKnowledgeId = id
-        this.getResourceDocument(id)
-        this.listAttachment(id)
+      menuSelect (index) {
+        this.currentKnowledgeIndex = parseInt(index)
+        console.info(this.currentKnowledgeIndex)
+        this.getResourceDocument(this.knowledges[this.currentKnowledgeIndex].resourceDocumentId)
+        this.listAttachment(this.knowledges[this.currentKnowledgeIndex].id)
         this.visible = true
         this.tabClick(1, true)
       },
@@ -101,11 +104,20 @@
           let res = response.data
           if (res.code === 666) {
             this.knowledges = res.data
-            this.currentKnowledgeId = this.knowledges[0].resourceDocumentId
-            this.$nextTick(() => {
-              this.$refs.baseMenu.updateActiveName()
+            if (this.$route.query.kId) {
+              this.knowledges.forEach((item, i) => {
+                if (item.id === parseInt(this.$route.query.kId)) {
+                  this.currentKnowledgeIndex = i
+                }
+              })
+            } else {
+              this.currentKnowledgeIndex = 0
+            }
+            this.$nextTick(function () {
+              this.$refs.knowledgeMenu.updateOpened()
+              this.$refs.knowledgeMenu.updateActiveName()
             })
-            this.menuSelect(this.currentKnowledgeId)
+            this.menuSelect(this.currentKnowledgeIndex)
           }
         }).catch(() => {
         })
@@ -119,8 +131,11 @@
           let res = response.data
           if (res.code === 666) {
             this.resource = res.data
+          } else {
+            this.$Message.error('服务器错误')
           }
         }).catch(() => {
+          this.$Message.error('服务器错误')
         })
       },
       listAttachment (id) {
@@ -139,7 +154,7 @@
       },
       tabClick (name, isLoad) {
         if (name === 1) {
-          this.$refs.example.loadData(this.currentKnowledgeId, isLoad)
+          this.$refs.example.loadData(this.knowledges[this.currentKnowledgeIndex].id, isLoad)
         }
       }
     }
@@ -161,6 +176,7 @@
     padding-right: 20px;
   }
   .layout-content-at {
+
   }
   h1 {
     font-size: 26px;
