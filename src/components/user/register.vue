@@ -21,7 +21,19 @@
       <Input type="password" v-model="repeatPassword" placeholder="确认密码"
              style="margin-top: 20px;width: 400px;margin-left: 22px" size="large">
       </Input>
-      <Button class="loginBtn" type="primary" :loading="loading" shape="circle" size="large" @click="login"
+      <div style="margin-top: 20px;padding-left: 5px">
+          <Row type="flex" justify="center">
+            <Col span="4"  v-for="(item,index) in headImgs" :key="item.src">
+            <div class="register-avatar-select">
+              <Button :type="item.select?'dashed':'text'" @click="headImgSelect(index)">
+                <Avatar  :src="item.src" size="default"></Avatar>
+              </Button>
+            </div>
+            </Col>
+          </Row>
+      </div>
+
+      <Button class="loginBtn" type="primary" :loading="loading" shape="circle" size="large" @click="register"
               style="width: 400px;height: 48px;margin-top: 30px;margin-left: 23px;background-color: #495060;border-color:#495060">
         <span v-if="!loading">注册</span>
       </Button>
@@ -46,11 +58,40 @@
         repeatPassword: '',
         name: '',
         loading: false,
-        visible: true
+        visible: true,
+        headImg: '/static/img/avatar1.png',
+        headImgs: [
+          {
+            src: '/static/img/avatar1.png',
+            select: true
+          },
+          {
+            src: '/static/img/avatar2.png',
+            select: false
+          },
+          {
+            src: '/static/img/avatar3.png',
+            select: false
+          },
+          {
+            src: '/static/img/avatar4.png',
+            select: false
+          }
+        ]
       }
     },
     methods: {
-      login () {
+      headImgSelect (index) {
+        this.headImg = this.headImgs[index].src
+        this.headImgs.forEach((item, i) => {
+          if (i === index) {
+            item.select = true
+          } else {
+            item.select = false
+          }
+        })
+      },
+      register () {
         if (!this.username || !this.password || !this.name || !this.repeatPassword) {
           this.$Message.error('请输入账号和密码')
           return
@@ -63,7 +104,8 @@
         this.$http.post('/api/user/register', qs.stringify({
           password: this.password,
           username: this.username,
-          name: this.name
+          name: this.name,
+          headImg: this.headImg
         })).then((response) => {
           this.loading = false
           let res = response.data
@@ -84,6 +126,17 @@
   }
 </script>
 
+<style>
+  .register-avatar-select img{
+    max-height: 100%;
+    max-width: 100%;
+    display: inline-block;
+  }
+  .register-avatar-select {
+    width: 80px;
+    padding: 2px;
+  }
+</style>
 <style lang="stylus" rel="stylesheet/stylus">
   .ivu-input-large
     font-size 14px;
@@ -102,7 +155,7 @@
     align-items center
     background-size cover
     height 100%
-    background-image url("../../static/img/background4.jpg")
+    background-image url("/static/img/background4.jpg")
   h2
     margin-top 30px
     margin-bottom 20px

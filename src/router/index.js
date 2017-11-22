@@ -21,6 +21,7 @@ import SearchExpandKnowledge from '../components/search/expand_knowledge.vue'
 import SearchStudentWork from '../components/search/work.vue'
 import SearchTopic from '../components/search/topic.vue'
 import SearchResource from '../components/search/resource.vue'
+import Index from '../components/index/index.vue'
 
 Vue.use(Router)
 
@@ -84,6 +85,10 @@ export default new Router({
         {
           path: '/user/test_history',
           component: TestHistory
+        },
+        {
+          path: '/index',
+          component: Index
         },
         {
           path: '/search',

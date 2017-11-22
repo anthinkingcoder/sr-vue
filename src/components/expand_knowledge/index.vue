@@ -8,11 +8,10 @@
           <a>
             <Card >
               <p slot="title">
-                python里使用正则表达式的后向搜索肯定模式
-                {{item.title}}
+                {{item.name}}
               </p>
               <p slot="extra">
-                <a :href="item.url" target="_blank">原文</a>
+                <a :href="item.url" target="_blank">查看原文</a>
               </p>
               <p class="ek-summary">
                 {{item.summary}}
@@ -30,7 +29,7 @@
     </div>
 
     <div style="text-align: center;margin-top: 30px" v-show="total > per">
-      <Page :total="total" :current="page" :page-size="per" @on-change="listExpandKnowledge"></Page>
+      <Page :total="total" :current="page" :page-size="per" @on-change="listExpandKnowledge" show-elevator></Page>
     </div>
 
     <Modal v-model="loading" width="200" :closable="false" :footerHide="true" :mask-closable="false">
@@ -52,12 +51,13 @@
         expandKnowledgeList: [],
         loading: true,
         page: 0,
-        per: 10,
+        per: 6,
         total: 0
       }
     },
     methods: {
       listExpandKnowledge (page) {
+        this.page = page - 1
         this.loading = true
         this.$http.get('/api/expand_knowledge/list', {
           params: {

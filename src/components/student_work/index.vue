@@ -24,17 +24,17 @@
     <div class="student-work-layout-content">
       <div class="student-work-layout-content-main">
           <Row>
-              <Col span="4" v-for="item in studentWorks" :key="item.id"  style="margin: 10px">
+              <Col span="4" v-for="item in studentWorks" :key="item.id"  style="margin:20px">
               <a @click="show(item.id)">
-                <Card>
-                  <div  style="width:200px;height: 300px">
+                <Card style="height: 250px">
+                  <div  style="width: 100%">
                     <div class="work-cover">
-                      <img :src="item.coverUrl ? item.coverUrl: '/static/img/avatar2.jpg'" style="max-width: 200px">
+                      <img :src="item.coverUrl ? item.coverUrl: '/static/img/avatar2.jpg'" style="width: 100%;height: 100%">
                     </div>
-                    <p class="work-title">{{item.title}}</p>
+                    <p class="work-title"  v-html="item.title"></p>
                     <div>
                       <Icon type="ios-person-outline" color="#93999f"></Icon>
-                      <span class="work-summary">{{item.author}}</span>
+                      <span class="work-summary" >{{item.author}}</span>
                     </div>
                     <p class="work-summary">{{item.summary}}</p>
                   </div>
@@ -187,8 +187,8 @@
     color: #14191e;
   }
   .work-cover {
-    max-height: 200px;
-    width: 200px
+    height: 120px;
+    width: 100%;
   }
 
   .answer-sheet-num {

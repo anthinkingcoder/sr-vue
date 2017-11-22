@@ -33,6 +33,28 @@
       </Row>
       </Col>
     </Row>
+    <Row  type="flex" justify="center">
+      <Col span="18">
+      <Row :gutter="16">
+        <Col span="24">
+        <Card :bordered="false" :dis-hover="true">
+          <p slot="title">
+            分类
+          </p>
+          <p v-if="studentWork.category === 1">
+           课程设计
+          </p>
+          <p v-else-if="studentWork.category === 3">
+            大赛作品
+          </p>
+          <p v-else>
+            项目实训
+          </p>
+        </Card>
+        </Col>
+      </Row>
+      </Col>
+    </Row>
 
     <Row  type="flex" justify="center">
       <Col span="18">

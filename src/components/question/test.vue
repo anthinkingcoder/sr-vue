@@ -33,7 +33,7 @@
             </Row>
           </br>
             <Row v-if="this.testRecord.questionTestRecord.question.answerCategory === 1">
-              <Col>
+              <Col span="24">
               <RadioGroup  v-model="testRecord.questionTestRecord.answer" vertical>
                 <Radio label="A" v-if="testRecord.questionTestRecord.question.possibleAnswerOne">
                   <span class="question-answer">{{testRecord.questionTestRecord.question.possibleAnswerOne}}</span>
@@ -56,25 +56,29 @@
               </RadioGroup>
               </Col>
             </Row>
-
-            <Row v-if="this.testRecord.questionTestRecord.question.answerCategory === 2">
-              <Col>
-              <CheckboxGroup  v-model="checkBoxAnswer" vertical>
+            <Row v-show="this.testRecord.questionTestRecord.question.answerCategory === 2">
+              <Col span="24">
+              <CheckboxGroup  v-model="checkBoxAnswer">
                 <Checkbox label="A" v-if="this.testRecord.questionTestRecord.question.possibleAnswerOne">
                   <span class="question-answer">{{this.testRecord.questionTestRecord.question.possibleAnswerOne}}</span>
                 </Checkbox>
+                <br>
                 <Checkbox label="B" v-if="this.testRecord.questionTestRecord.question.possibleAnswerTwo">
                   <span class="question-answer">{{this.testRecord.questionTestRecord.question.possibleAnswerTwo}}</span>
                 </Checkbox>
+                <br>
                 <Checkbox label="C" v-if="this.testRecord.questionTestRecord.question.possibleAnswerThree">
                   <span class="question-answer">{{this.testRecord.questionTestRecord.question.possibleAnswerThree}}</span>
                 </Checkbox>
+                <br>
                 <Checkbox label="D" v-if="this.testRecord.questionTestRecord.question.possibleAnswerFour">
                   <span class="question-answer">{{this.testRecord.questionTestRecord.question.possibleAnswerFour}}</span>
                 </Checkbox>
+                <br>
                 <Checkbox label="E" v-if="this.testRecord.questionTestRecord.question.possibleAnswerFive">
                   <span class="question-answer">{{this.testRecord.questionTestRecord.question.possibleAnswerFive}}</span>
                 </Checkbox>
+                <br>
                 <Checkbox label="F" v-if="this.testRecord.questionTestRecord.question.possibleAnswerSix">
                   <span class="question-answer">{{this.testRecord.questionTestRecord.question.possibleAnswerSix}}</span>
                 </Checkbox>
@@ -204,7 +208,8 @@
                 this.$router.push({
                   path: '/question/evaluate_result',
                   query: {
-                    testRecordId: this.testRecord.testRecordId
+                    testRecordId: this.testRecord.testRecordId,
+                    mId: 6
                   }
                 })
               }
@@ -234,7 +239,8 @@
             this.$router.push({
               path: '/question/evaluate_result',
               query: {
-                testRecordId: res.data.id
+                testRecordId: res.data.id,
+                mId: 6
               }
             })
           } else {

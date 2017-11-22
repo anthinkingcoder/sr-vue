@@ -221,7 +221,8 @@
             this.$router.push({
               path: '/question/test',
               query: {
-                testRecordId: result.data.testRecordId
+                testRecordId: result.data.testRecordId,
+                mId: 6
               }
             })
           } else {

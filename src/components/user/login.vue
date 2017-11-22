@@ -103,7 +103,7 @@
     align-items center
     background-size cover
     height 100%
-    background-image url("../../static/img/background4.jpg")
+    background-image url("/static/img/background4.jpg")
   h2
     margin-top 30px
     margin-bottom 20px

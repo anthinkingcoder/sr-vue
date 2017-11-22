@@ -24,7 +24,7 @@
     <div class="resource-layout-content">
       <div class="resource-layout-content-main">
         <Row>
-          <Col span="4" v-for="item in resources" :key="item.id"  style="margin: 10px">
+          <Col span="4" v-for="item in resources" :key="item.id"  style="margin: 20px">
           <a>
             <Card>
               <Row type="flex" justify="end">

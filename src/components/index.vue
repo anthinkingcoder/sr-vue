@@ -83,12 +83,13 @@
   <div class="layout">
     <BackTop></BackTop>
     <div class="layout-nav">
-
       <Affix>
         <Menu mode="horizontal" :active-name="activeNav" style="height: 64px;
     line-height: 60px;" @on-select="menuSelect">
           <div class="layout-logo">
-            <img src="/static/img/java.jpg" height="50px"></Col>
+            <a  @click="goToIndex">
+              <img src="/static/img/java.jpg" height="50px"></Col>
+            </a>
           </div>
           <div class="layout-search">
               <Row>
@@ -217,6 +218,11 @@
             path: '/question/evaluate_result',
             title: '在线测试',
             menu: false
+          },
+          {
+            path: '/index',
+            title: 'java学习网',
+            menu: false
           }
         ],
         search: ''
@@ -248,6 +254,11 @@
           path: '/user/test_history',
           query: {
           }
+        })
+      },
+      goToIndex () {
+        this.$router.push({
+          path: '/index'
         })
       },
       goToSearch () {
