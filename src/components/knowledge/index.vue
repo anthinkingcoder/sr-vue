@@ -3,6 +3,7 @@
     <div class="layout-content">
       <Row type="flex" justify="center">
         <Col span="5">
+        <Affix :offset-top="50">
         <Menu :active-name="currentKnowledgeIndex"  @on-select="menuSelect" ref="knowledgeMenu">
           <MenuGroup :title="title">
             <MenuItem  v-for="(item,index) in knowledges" :name="index" :key="item.name" >
@@ -10,6 +11,7 @@
             </MenuItem>
           </MenuGroup>
         </Menu>
+        </Affix>
         </Col>
         <Col span="19">
           <div style="padding-top: 10px">

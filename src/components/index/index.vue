@@ -4,31 +4,31 @@
         <Col span="18">
         <Card>
             <div>
-              <Carousel v-model="select" :radius-dot="true" arrow="always" loop>
+              <Carousel v-model="select" :radius-dot="true" arrow="always"  :autoplay="true" loop>
                 <CarouselItem>
                   <div class="demo-carousel">
-                    <a target="_blank" href="https://www.imooc.com">
+                    <a target="_blank" href="http://localhost:8089/knowledge?topicId=5&title=Java%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1">
                       <img src="http://img.mukewang.com/5a1395dd0001564f09360316.jpg">
                     </a>
                   </div>
                 </CarouselItem>
                 <CarouselItem>
                   <div class="demo-carousel">
-                    <a target="_blank" href="https://www.imooc.com">
+                    <a target="_blank" href="http://localhost:8089/knowledge?topicId=6&title=Java%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B">
                       <img src="http://img.mukewang.com/5a0c1fc4000155d009360316.jpg">
                     </a>
                   </div>
                 </CarouselItem>
                 <CarouselItem>
                   <div class="demo-carousel">
-                    <a target="_blank" href="https://www.imooc.com">
+                    <a target="_blank" href="http://localhost:8089/knowledge?topicId=7&title=Junit%E5%85%A5%E9%97%A8">
                       <img src="http://img.mukewang.com/59fafaa7000161b309360316.jpg">
                     </a>
                   </div>
                 </CarouselItem>
                 <CarouselItem>
                   <div class="demo-carousel">
-                    <a target="_blank"  href="https://www.imooc.com">
+                    <a target="_blank"  href="http://localhost:8089/knowledge?topicId=8&title=Hibernate%20%E9%AB%98%E7%BA%A7%E6%95%99%E7%A8%8B">
                       <img src="http://img.mukewang.com/5a12c2660001f4ee09360316.jpg">
                     </a>
                   </div>
@@ -176,6 +176,50 @@
      <Col span="18">
      <Card>
        <Row>
+         <Col span="24" style="text-align: center">
+         <h2 class="index-title">
+           <Icon type="ios-cloud-download"></Icon>
+           <em>优</em>
+           <em>秀</em>
+           <em>插</em>
+           <em>件</em>
+           <Icon type="ios-cloud-download"></Icon>
+         </h2>
+         </Col>
+         <Col span="24"  v-show="softWareVisible">
+         <Row type="flex" justify="start" :gutter="16">
+           <Col span="6" v-for="item in softWares" :key="item.id">
+           <Card style="height:320px;width: 100%">
+             <Row type="flex" justify="end">
+               <Col span="24">
+               <img :src="item.coverUrl ? item.coverUrl: '/static/img/avatar2.jpg'" style="width: 100%;height: 148px">
+               </Col>
+               <Col span="24" style="margin-top: 5px">
+               <p class="work-title" style="">{{item.name}}</p>
+               </Col>
+               <Col span="24" style="margin-top: 5px">
+               <p class="work-summary">{{item.summary}}</p>
+               </Col>
+               <Col span="24" style="margin-top: 5px;text-align: right">
+               <Button type="success" icon="ios-cloud-download" @click="go(item.url)">
+                 立即下载
+               </Button>
+               </Col>
+             </Row>
+           </Card>
+           </Col>
+         </Row>
+         </Col>
+       </Row>
+     </Card>
+     </Col>
+   </Row>
+   <br>
+   <br>
+   <Row type="flex" justify="center">
+     <Col span="18">
+     <Card>
+       <Row>
          <Col span="24" style="text-align: center" :gutter="16">
          <h2 class="index-title">
            <Icon type="ionic"></Icon>
@@ -187,8 +231,8 @@
          </h2>
          </Col>
          <Col span="24"  v-show="knowledgeVisible">
-         <Row type="flex" justify="start">
-           <Col span="6" v-for="(item,index) in knowledges" :key="item.id" style="margin: 5px">
+         <Row type="flex" justify="start" :gutter="16">
+           <Col span="6" v-for="(item,index) in knowledges" :key="item.id">
            <Card>
              <div style="text-align:center" class="topic">
                <a @click="showKnowledge(item.id,item.name)">
@@ -229,8 +273,8 @@
          </h2>
          </Col>
          <Col span="24"  v-show="topicVisible">
-         <Row type="flex" justify="start">
-           <Col span="6" v-for="(item,index) in topics" :key="item.id" style="margin: 5px">
+         <Row type="flex" justify="start"  :gutter="16">
+           <Col span="6" v-for="(item,index) in topics" :key="item.id">
            <Card>
              <div style="text-align:center" class="topic">
                <a @click="showTopic(item.id,item.name)">
@@ -312,6 +356,7 @@
       this.listTopic()
       this.listKnowledge()
       this.listExpandKnowledge()
+      this.listSoftWare()
     },
     data () {
       return {
@@ -327,7 +372,9 @@
         knowledges: [],
         knowledgeVisible: false,
         expandKnowledges: [],
-        expandKnowledgeVisible: false
+        expandKnowledgeVisible: false,
+        softWares: [],
+        softWaresVisible: false
       }
     },
     methods: {
@@ -358,6 +405,22 @@
           if (res.code === 666) {
             this.webs = res.data.content
             this.webVisible = true
+          }
+        }).catch(() => {
+        })
+      },
+      listSoftWare () {
+        this.$http.get('/api/resource', {
+          params: {
+            category: 2,
+            size: 5,
+            page: 0
+          }
+        }).then((response) => {
+          let res = response.data
+          if (res.code === 666) {
+            this.softWares = res.data.content
+            this.softWareVisible = true
           }
         }).catch(() => {
         })
@@ -482,6 +545,7 @@
     line-height: 24px;
     font-weight: 200;
     max-height: 48px;
+    max-width: 100%;
     transition: .3s all linear;
     word-break: break-all;
     word-wrap: break-word;

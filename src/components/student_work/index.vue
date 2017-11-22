@@ -185,6 +185,7 @@
     display: -webkit-box;
     padding-top: 5px;
     color: #14191e;
+    max-width: 100%;
   }
   .work-cover {
     height: 120px;

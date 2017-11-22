@@ -34,7 +34,7 @@
               {{currentTopicCateogry}}
             </p>
             <Row  type="flex" justify="start">
-              <Col span="7"  v-for="item in topics" :key="item.id"   style="margin: 5px" >
+              <Col span="6"  v-for="item in topics" :key="item.id"   style="margin: 5px" >
               <Card>
                 <div style="text-align:center" class="topic">
                   <a @click="show(item.id,item.name)">
@@ -42,7 +42,7 @@
                       <Col span="6">
                       <Avatar :src="item.coverUrl ? item.coverUrl: '/static/img/java.jpg'" size="default"/>
                       </Col>
-                      <Col span="12">
+                      <Col span="18">
                       <div >
                         {{item.name}}
                       </div>
@@ -103,6 +103,7 @@
           }
         })
       },
+
       showTopic (cateogryId, categoryName) {
         this.listTopic(cateogryId, categoryName)
       },
@@ -128,7 +129,6 @@
     }
   }
 </script>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style >
   .topic {

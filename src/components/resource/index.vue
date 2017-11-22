@@ -197,6 +197,7 @@
     white-space:nowrap;
     text-overflow:ellipsis;
     -o-text-overflow:ellipsis;
+    max-width: 100%;
   }
   .work-cover {
     max-height: 200px;
