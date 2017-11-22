@@ -9,8 +9,8 @@
             <Row>
               <Col span="21">
                <Progress :percent="(index + 1) / this.testRecord.questionNum * 100">
-                <span style="font-size: 20px">{{index + 1}}/{{this.testRecord.questionNum}}</span>
-              </Progress>
+                 <span style="font-size: 18px;float: right">{{index + 1}}/{{this.testRecord.questionNum}}</span>
+               </Progress>
               </Col>
               <Col span="3">
                 <CountDown :date="this.testRecord.startTime"></CountDown>
@@ -145,7 +145,7 @@
         questionIndexListVisible: false,
         questionCard: '展开答题卡',
         checkBoxAnswer: [],
-        answer: 'A'
+        answer: ''
       }
     },
     computed: {
@@ -166,6 +166,7 @@
         }
       },
       initCheckBoxAnswer () {
+        this.checkBoxAnswer = []
         if (this.testRecord) {
           if (this.testRecord.questionTestRecord.question.answerCategory === 2) {
             if (this.testRecord.questionTestRecord.answer) {
